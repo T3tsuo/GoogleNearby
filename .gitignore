@@ -1,3 +1,7 @@
+cookies.txt
+email.dat
+mail_password.dat
+.idea
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
