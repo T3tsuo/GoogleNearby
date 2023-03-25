@@ -104,15 +104,15 @@ class Ui_RealTimeUI(object):
         self.person.setStyleSheet("background-color: white;")
         for i in range(len(person_objects)):
             self.person.addItem(person_objects[i].full_name)
-        self.configuration = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.location = QtWidgets.QPushButton(parent=self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("Tw Cen MT")
         font.setPointSize(10)
-        self.configuration.setText("Configure")
-        self.configuration.setStyleSheet("color: black; background-color: grey;")
-        self.configuration.setFont(font)
-        self.configuration.setGeometry(QtCore.QRect(RealTimeUI.width() // 2 + 20,
-                                                    RealTimeUI.height() * 2 // 3 - 50 // 2, 140, 50))
+        self.location.setText("Notify Location")
+        self.location.setStyleSheet("color: black; background-color: grey;")
+        self.location.setFont(font)
+        self.location.setGeometry(QtCore.QRect(RealTimeUI.width() // 2 + 20,
+                                               RealTimeUI.height() * 2 // 3 - 50 // 2, 140, 50))
         self.start_button = QtWidgets.QPushButton(parent=self.centralwidget)
         self.start_button.setStyleSheet("color: black; background-color: grey;")
         font = QtGui.QFont()

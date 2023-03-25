@@ -5,6 +5,8 @@ import pickle
 from math import cos, asin, sqrt, pi
 import smtplib
 
+from UserLocation import UserLocation
+
 if os.path.isfile("email.dat"):
     google_email = pickle.load(open("email.dat", "rb"))
 
@@ -14,6 +16,17 @@ if os.path.isfile("mail_password.dat"):
 cookies_file = 'cookies.txt'
 
 service = Service(cookies_file=cookies_file, authenticating_account=google_email)
+
+
+# MOCK DATA
+"""person1 = UserLocation(service.get_person_by_full_name("Nathaniel Chute"))
+person1.add_place("spryfield1", 44.6213212, -63.6222244, False)
+person1.add_place("spryfield2", 44.6213212, -63.6222244, False)
+
+person2 = UserLocation(service.get_person_by_full_name("Ethan Ivanoff"))
+person2.add_place("spryfield", 44.6213212, -63.6222244, False)"""
+
+saved_locations = []
 
 
 def distance_km(lat1, lon1, lat2, lon2):
@@ -43,21 +56,46 @@ def ping_mail(user, password, mes):
         print('Something went wrong...')
 
 
+def nearby():
+    message = ""
+    for person in service.get_all_people():
+        if person.full_name != google_email:
+            d = distance_km(service.get_coordinates_by_full_name(google_email)[0],
+                            service.get_coordinates_by_full_name(google_email)[1],
+                            person.latitude, person.longitude)
+            # if distance is less or equal to 150 meters
+            if d <= 0.15:
+                message += str(person.full_name) + " is " + str(round(d * 1000, 2)) + " meters away\n"
+    if message == "":
+        print("No One is Nearby")
+    return message
+
+
+def at_location_check():
+    message = ""
+    for personExtended in saved_locations:
+        for place in personExtended.places:
+            d = distance_km(place["latitude"],
+                            place["longitude"],
+                            personExtended.person.latitude, personExtended.person.longitude)
+            # if person was not at the location but just arrived
+            if d <= 0.15 and not place['at_location']:
+                place['at_location'] = True
+                message += personExtended.person.full_name + " is arrived at " + place["name"] + "\n"
+            # if person is away from the location but was just there
+            elif d > 0.15 and place['at_location']:
+                place['at_location'] = False
+                message += personExtended.person.full_name + " just left " + place["name"] + "\n"
+    return message
+
+
 def run():
     while True:
         message = ""
-        for person in service.get_all_people():
-            if person.full_name != google_email:
-                d = distance_km(service.get_coordinates_by_full_name(google_email)[0],
-                                service.get_coordinates_by_full_name(google_email)[1],
-                                person.latitude, person.longitude)
-                # if distance is less or equal to 150 meters
-                if d <= 0.15:
-                    message += str(person.full_name) + " is " + str(round(d*1000, 2)) + " meters away\n"
+        message += nearby()
+        at_location_check()
         if message != "":
             ping_mail(google_email, mail_password, message)
             print(message)
-        else:
-            print("No one is nearby")
         # checks once a minute
         time.sleep(60)
