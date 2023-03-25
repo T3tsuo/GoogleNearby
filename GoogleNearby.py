@@ -51,9 +51,13 @@ def run():
                 d = distance_km(service.get_coordinates_by_full_name(google_email)[0],
                                 service.get_coordinates_by_full_name(google_email)[1],
                                 person.latitude, person.longitude)
-                message += str(person.full_name) + " is " + str(round(d*1000, 2)) + " meters away\n"
+                # if distance is less or equal to 150 meters
+                if d <= 0.15:
+                    message += str(person.full_name) + " is " + str(round(d*1000, 2)) + " meters away\n"
         if message != "":
             ping_mail(google_email, mail_password, message)
             print(message)
+        else:
+            print("No one is nearby")
         # checks once a minute
         time.sleep(60)
