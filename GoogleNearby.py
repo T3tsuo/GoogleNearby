@@ -17,7 +17,7 @@ if os.path.isfile("mail_password.dat"):
 cookies_file = 'cookies.txt'
 service = Service(cookies_file=cookies_file, authenticating_account=google_email)
 
-# loading saved_locations format: FulleName,LocationName,Latitude,Longitude
+# loading saved_locations format: FullName,LocationName,Latitude,Longitude
 saved_locations = []
 if os.path.isfile("saved_locations.txt"):
     with open ("saved_locations.txt", "r") as location_text:
