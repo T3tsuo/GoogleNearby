@@ -20,14 +20,11 @@ import GoogleNearby
 if os.path.isfile("email.dat"):
     google_email = pickle.load(open("email.dat", "rb"))
 else:
-    google_email = input("Enter email that's linked to cookies: ")
-    pickle.dump(google_email, open("email.dat", "wb"))
-
+    google_email = None
 if os.path.isfile("mail_password.dat"):
     mail_password = pickle.load(open("mail_password.dat", "rb"))
 else:
-    mail_password = input("Email's password (if using gmail, generate App Password): ")
-    pickle.dump(mail_password, open("mail_password.dat", "wb"))
+    mail_password = None
 if os.path.isfile("window_position.dat"):
     window_position = pickle.load(open("window_position.dat", "rb"))
 else:
