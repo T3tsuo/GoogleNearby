@@ -13,20 +13,21 @@ if os.path.isfile("email.dat"):
 if os.path.isfile("mail_password.dat"):
     mail_password = pickle.load(open("mail_password.dat", "rb"))
 
+# login to google maps
 cookies_file = 'cookies.txt'
-
 service = Service(cookies_file=cookies_file, authenticating_account=google_email)
 
-
-# MOCK DATA
-"""person1 = UserLocation(service.get_person_by_full_name("Nathaniel Chute"))
-person1.add_place("spryfield1", 44.6213212, -63.6222244, False)
-person1.add_place("spryfield2", 44.6213212, -63.6222244, False)
-
-person2 = UserLocation(service.get_person_by_full_name("Ethan Ivanoff"))
-person2.add_place("spryfield", 44.6213212, -63.6222244, False)"""
-
+# loading saved_locations format: FulleName,LocationName,Latitude,Longitude
 saved_locations = []
+if os.path.isfile("saved_locations.txt"):
+    with open ("saved_locations.txt", "r") as location_text:
+        location_data = location_text.read().splitlines()
+    for data in location_data:
+        user = data.split(",")
+        tempuser = service.get_person_by_full_name(user[0])
+        if tempuser is not None:
+            saved_locations.append(UserLocation(tempuser, user[1],
+                                                float(user[2]), float(user[3])))
 
 
 def distance_km(lat1, lon1, lat2, lon2):
@@ -74,18 +75,17 @@ def nearby():
 def at_location_check():
     message = ""
     for personExtended in saved_locations:
-        for place in personExtended.places:
-            d = distance_km(place["latitude"],
-                            place["longitude"],
-                            personExtended.person.latitude, personExtended.person.longitude)
-            # if person was not at the location but just arrived
-            if d <= 0.15 and not place['at_location']:
-                place['at_location'] = True
-                message += personExtended.person.full_name + " is arrived at " + place["name"] + "\n"
-            # if person is away from the location but was just there
-            elif d > 0.15 and place['at_location']:
-                place['at_location'] = False
-                message += personExtended.person.full_name + " just left " + place["name"] + "\n"
+        d = distance_km(personExtended.place["latitude"],
+                        personExtended.place["longitude"],
+                        personExtended.person.latitude, personExtended.person.longitude)
+        # if person was not at the location but just arrived
+        if d <= 0.15 and not personExtended.place['at_location']:
+            personExtended.place['at_location'] = True
+            message += personExtended.person.full_name + " has arrived at " + personExtended.place["name"] + "\n"
+        # if person is away from the location but was just there
+        elif d > 0.15 and personExtended.place['at_location']:
+            personExtended.place['at_location'] = False
+            message += personExtended.person.full_name + " just left " + personExtended.place["name"] + "\n"
     return message
 
 
@@ -93,7 +93,7 @@ def run():
     while True:
         message = ""
         message += nearby()
-        at_location_check()
+        message += at_location_check()
         if message != "":
             ping_mail(google_email, mail_password, message)
             print(message)

@@ -76,10 +76,10 @@ class Ui_RealTimeUI(object):
 
     def setupUi(self, RealTimeUI):
         global window, app, window_position
-        RealTimeUI.setObjectName("PokemonUI")
+        RealTimeUI.setObjectName("RealTimeUI")
         RealTimeUI.setFixedSize(800, 600)
         RealTimeUI.setStyleSheet("background-color: black;")
-        RealTimeUI.setWindowTitle("PokemonUI")
+        RealTimeUI.setWindowTitle("RealTimeUI")
         if window_position is not None:
             RealTimeUI.move(window_position)
         window = RealTimeUI
@@ -104,28 +104,19 @@ class Ui_RealTimeUI(object):
         self.person.setStyleSheet("background-color: white;")
         for i in range(len(person_objects)):
             self.person.addItem(person_objects[i].full_name)
-        self.location = QtWidgets.QPushButton(parent=self.centralwidget)
-        font = QtGui.QFont()
-        font.setFamily("Tw Cen MT")
-        font.setPointSize(10)
-        self.location.setText("Notify Location")
-        self.location.setStyleSheet("color: black; background-color: grey;")
-        self.location.setFont(font)
-        self.location.setGeometry(QtCore.QRect(RealTimeUI.width() // 2 + 20,
-                                               RealTimeUI.height() * 2 // 3 - 50 // 2, 140, 50))
         self.start_button = QtWidgets.QPushButton(parent=self.centralwidget)
         self.start_button.setStyleSheet("color: black; background-color: grey;")
         font = QtGui.QFont()
         font.setFamily("Tw Cen MT")
         font.setPointSize(10)
         self.start_button.setFont(font)
-        self.start_button.setGeometry(QtCore.QRect(RealTimeUI.width() // 2 - 160,
+        self.start_button.setGeometry(QtCore.QRect(RealTimeUI.width() // 2 - 70,
                                                    RealTimeUI.height() * 2 // 3 - 50 // 2, 140, 50))
         self.start_button.setText("Start")
         self.stop_button = QtWidgets.QPushButton(parent=self.centralwidget)
         self.stop_button.setStyleSheet("color: black; background-color: grey;")
         self.stop_button.setFont(font)
-        self.stop_button.setGeometry(QtCore.QRect(RealTimeUI.width() // 2 - 160,
+        self.stop_button.setGeometry(QtCore.QRect(RealTimeUI.width() // 2 - 70,
                                                   RealTimeUI.height() * 2 // 3 - 50 // 2, 140, 50))
         self.stop_button.setText("Stop")
         self.stop_button.hide()
