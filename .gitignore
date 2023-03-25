@@ -1,6 +1,7 @@
 cookies.txt
 email.dat
 mail_password.dat
+window_position.dat
 .idea
 # Byte-compiled / optimized / DLL files
 __pycache__/

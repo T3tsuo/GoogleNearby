@@ -1,1 +1,2 @@
 locationsharinglib==4.2.0
+PyQt6~=6.4.2

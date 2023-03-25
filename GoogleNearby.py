@@ -1,5 +1,4 @@
-import datetime
-
+import time
 from locationsharinglib import Service
 import os
 import pickle
@@ -9,7 +8,7 @@ import smtplib
 if os.path.isfile("email.dat"):
     google_email = pickle.load(open("email.dat", "rb"))
 else:
-    google_email = input("Enter email linked to cookies. Do not use same account as the user being compared to: ")
+    google_email = input("Enter email that's linked to cookies: ")
     pickle.dump(google_email, open("email.dat", "wb"))
 
 if os.path.isfile("mail_password.dat"):
@@ -51,15 +50,16 @@ def ping_mail(user, password, mes):
 
 
 def run():
-    message = ""
-    for person in service.get_all_people():
-        if person.full_name != google_email:
-            d = distance_km(service.get_coordinates_by_full_name(google_email)[0],
-                            service.get_coordinates_by_full_name(google_email)[1],
-                            person.latitude, person.longitude)
-            message += str(person.full_name) + " is " + str(round(d, 2)) + "km away\n"
-    ping_mail(google_email, mail_password, message)
-    print(message)
-
-
-run()
+    while True:
+        message = ""
+        for person in service.get_all_people():
+            if person.full_name != google_email:
+                d = distance_km(service.get_coordinates_by_full_name(google_email)[0],
+                                service.get_coordinates_by_full_name(google_email)[1],
+                                person.latitude, person.longitude)
+                message += str(person.full_name) + " is " + str(round(d*1000, 2)) + " meters away\n"
+        if message != "":
+            ping_mail(google_email, mail_password, message)
+            print(message)
+        # checks once a minute
+        time.sleep(60)
