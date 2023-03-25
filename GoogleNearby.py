@@ -86,10 +86,7 @@ def at_location_check():
         if tempuser is not None:
             for i in range(len(saved_locations)):
                 # find the correct saved location by comparing fullname, place name, latitude and longitude
-                if saved_locations[i].person.full_name == tempuser.full_name and \
-                        saved_locations[i].place["name"] == userdata[1] and \
-                        saved_locations[i].place["latitude"] == float(userdata[2]) and \
-                        saved_locations[i].place["longitude"] == float(userdata[3]):
+                if saved_locations[i].match(userdata[0], userdata[1], float(userdata[2]), float(userdata[3])):
                     # update the persons location
                     saved_locations[i].person = tempuser
 

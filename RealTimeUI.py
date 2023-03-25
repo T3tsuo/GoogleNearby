@@ -102,6 +102,7 @@ class Ui_RealTimeUI(object):
         self.person.setGeometry(QtCore.QRect(RealTimeUI.width() // 2 - 170 // 2,
                                              RealTimeUI.height() // 2 - 20, 170, 40))
         self.person.setStyleSheet("background-color: white;")
+        self.person.addItem("--")
         for i in range(len(person_objects)):
             self.person.addItem(person_objects[i].full_name)
         self.start_button = QtWidgets.QPushButton(parent=self.centralwidget)
