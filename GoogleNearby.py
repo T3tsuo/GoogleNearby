@@ -13,6 +13,8 @@ if os.path.isfile("email.dat"):
 if os.path.isfile("mail_password.dat"):
     mail_password = pickle.load(open("mail_password.dat", "rb"))
 
+black_listed_nearby = []
+
 # login to google maps
 cookies_file = 'cookies.txt'
 service = Service(cookies_file=cookies_file, authenticating_account=google_email)
@@ -64,11 +66,13 @@ def nearby():
             d = distance_km(service.get_coordinates_by_full_name(google_email)[0],
                             service.get_coordinates_by_full_name(google_email)[1],
                             person.latitude, person.longitude)
-            # if distance is less or equal to 150 meters
-            if d <= 0.15:
+            # if distance is less or equal to 300 meters
+            if d <= 0.3 and person.full_name not in black_listed_nearby:
                 message += str(person.full_name) + " is " + str(round(d * 1000, 2)) + " meters away\n"
-    if message == "":
-        print("No One is Nearby")
+                black_listed_nearby.append(person.full_name)
+            elif d > 0.3 and person.full_name in black_listed_nearby:
+                message += str(person.full_name) + " is no longer nearby\n"
+                black_listed_nearby.remove(person.full_name)
     return message
 
 
