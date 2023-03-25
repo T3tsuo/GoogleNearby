@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'PokemonUI.ui'
+# Form implementation generated from reading ui file 'RealTimeUI.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.2
 #

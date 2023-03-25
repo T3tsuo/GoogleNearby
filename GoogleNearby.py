@@ -120,5 +120,5 @@ def run():
         if message != "":
             ping_mail(google_email, mail_password, message)
             print(message)
-        # checks every 10 seconds
-        time.sleep(10)
+        # checks every minute
+        time.sleep(60)
