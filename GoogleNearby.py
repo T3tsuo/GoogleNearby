@@ -15,21 +15,22 @@ if os.path.isfile("mail_password.dat"):
 
 black_listed_nearby = []
 
-# login to google maps
+# login cookies
 cookies_file = 'cookies.txt'
 service = Service(cookies_file=cookies_file, authenticating_account=google_email)
 
 # loading saved_locations format: FullName,LocationName,Latitude,Longitude
-saved_locations = []
 if os.path.isfile("saved_locations.txt"):
-    with open ("saved_locations.txt", "r") as location_text:
+    with open("saved_locations.txt", "r") as location_text:
         location_data = location_text.read().splitlines()
-    for data in location_data:
-        user = data.split(",")
-        tempuser = service.get_person_by_full_name(user[0])
-        if tempuser is not None:
-            saved_locations.append(UserLocation(tempuser, user[1],
-                                                float(user[2]), float(user[3])))
+
+saved_locations = []
+for data in location_data:
+    user = data.split(",")
+    tempuser = service.get_person_by_full_name(user[0])
+    if tempuser is not None:
+        saved_locations.append(UserLocation(tempuser, user[1],
+                                            float(user[2]), float(user[3])))
 
 
 def distance_km(lat1, lon1, lat2, lon2):
@@ -78,16 +79,31 @@ def nearby():
 
 def at_location_check():
     message = ""
+    # refresh saved location
+    for data_temp in location_data:
+        userdata = data_temp.split(",")
+        tempuser = service.get_person_by_full_name(userdata[0])
+        if tempuser is not None:
+            for i in range(len(saved_locations)):
+                # find the correct saved location by comparing fullname, place name, latitude and longitude
+                if saved_locations[i].person.full_name == tempuser.full_name and \
+                        saved_locations[i].place["name"] == userdata[1] and \
+                        saved_locations[i].place["latitude"] == float(userdata[2]) and \
+                        saved_locations[i].place["longitude"] == float(userdata[3]):
+                    # update the persons location
+                    saved_locations[i].person = tempuser
+
+    # check if they are at location with their new updated location
     for personExtended in saved_locations:
         d = distance_km(personExtended.place["latitude"],
                         personExtended.place["longitude"],
                         personExtended.person.latitude, personExtended.person.longitude)
         # if person was not at the location but just arrived
-        if d <= 0.15 and not personExtended.place['at_location']:
+        if d <= 0.15 and personExtended.place['at_location'] is False:
             personExtended.place['at_location'] = True
             message += personExtended.person.full_name + " has arrived at " + personExtended.place["name"] + "\n"
         # if person is away from the location but was just there
-        elif d > 0.15 and personExtended.place['at_location']:
+        elif d > 0.15 and personExtended.place['at_location'] is True:
             personExtended.place['at_location'] = False
             message += personExtended.person.full_name + " just left " + personExtended.place["name"] + "\n"
     return message
@@ -95,11 +111,14 @@ def at_location_check():
 
 def run():
     while True:
+        # refresh google maps
+        service = Service(cookies_file=cookies_file, authenticating_account=google_email)
         message = ""
-        message += nearby()
-        message += at_location_check()
+        if service is not None:
+            message += nearby()
+            message += at_location_check()
         if message != "":
             ping_mail(google_email, mail_password, message)
             print(message)
-        # checks once a minute
-        time.sleep(60)
+        # checks every 10 seconds
+        time.sleep(10)
