@@ -86,7 +86,7 @@ class Ui_RealTimeUI(object):
         self.nam = QNetworkAccessManager()
         self.nam.finished.connect(set_window_icon_from_response)
         self.nam.get(QNetworkRequest(QUrl("https://raw.githubusercontent.com/"
-                                          "T3tsuo/PokemonUI/main/cache/poke.ico")))
+                                          "T3tsuo/GoogleNearby/main/cache/icon.ico")))
         self.centralwidget = QtWidgets.QWidget(parent=RealTimeUI)
         self.title = QtWidgets.QLabel(parent=self.centralwidget)
         self.title.setStyleSheet("color: #cccccc;")
