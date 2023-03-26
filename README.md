@@ -3,7 +3,7 @@ I want to see who is near me
 
 ## Configuration Steps:
 * Generate google app password for account
-* Run RUNFIRST.exe and input email and correlated app password
+* Run RUNFIRST.exe and input email and correlated app password (only needs to be ran once)
 * put cookies.txt (follow steps to get that file from costastf/locationsharinglib repo)
 * Run RealTimeUI.exe
 
