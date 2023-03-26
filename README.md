@@ -13,6 +13,8 @@ I want to see who is near me
 ### This will check if person is near certain location
 
 saved_locations.txt format: FullName,LocationName,Latitude,Longitude
+
+
 ex: 
 
 
