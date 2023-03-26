@@ -6,7 +6,7 @@ if not os.path.isfile("email.dat"):
     pickle.dump(google_email, open("email.dat", "wb"))
 
 if not os.path.isfile("mail_password.dat"):
-    mail_password = input("Email's password (if using gmail, generate App Password): ")
+    mail_password = input("Email's generated app password: ")
     pickle.dump(mail_password, open("mail_password.dat", "wb"))
 
 if not os.path.isfile("saved_locations.txt"):
