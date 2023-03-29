@@ -3,8 +3,8 @@
 ## Configuration Steps:
 * Generate google app password for account
 * Run RUNFIRST.exe and input email and correlated app password (only needs to be ran once)
-* put cookies.txt in the same folder as RealTimeUI.exe (follow steps to get that file from costastf/locationsharinglib repo)
-* Run RealTimeUI.exe
+* put cookies.txt in the same folder as GoogleNearby.exe (follow steps to get that file from costastf/locationsharinglib repo)
+* Run GoogleNearby.exe
 
 ## Saved Locations configuration
 
