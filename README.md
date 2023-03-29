@@ -1,5 +1,4 @@
 # GoogleNearby
-I want to see who is near me
 
 ## Configuration Steps:
 * Generate google app password for account
