@@ -106,16 +106,15 @@ def at_location_check():
     return message
 
 
-def run():
-    while True:
-        # refresh google maps
-        service = Service(cookies_file=cookies_file, authenticating_account=google_email)
-        message = ""
-        if service is not None:
-            message += nearby()
-            message += at_location_check()
-        if message != "":
-            ping_mail(google_email, mail_password, message)
-            print(message)
-        # checks every minute
-        time.sleep(60)
+while True:
+    # refresh google maps
+    service = Service(cookies_file=cookies_file, authenticating_account=google_email)
+    message = ""
+    if service is not None:
+        message += nearby()
+        message += at_location_check()
+    if message != "":
+        ping_mail(google_email, mail_password, message)
+        print(message)
+    # checks every minute
+    time.sleep(60)
