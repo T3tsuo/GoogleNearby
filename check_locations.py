@@ -1,4 +1,7 @@
+import sys
 import time
+
+import locationsharinglib
 from locationsharinglib import Service
 import os
 import pickle
@@ -107,14 +110,19 @@ def at_location_check():
 
 
 while True:
-    # refresh google maps
-    service = Service(cookies_file=cookies_file, authenticating_account=google_email)
-    message = ""
-    if service is not None:
-        message += nearby()
-        message += at_location_check()
-    if message != "":
+    try:
+        # refresh google maps
+        service = Service(cookies_file=cookies_file, authenticating_account=google_email)
+        message = ""
+        if service is not None:
+            message += nearby()
+            message += at_location_check()
+        if message != "":
+            ping_mail(google_email, mail_password, message)
+            print(message)
+        # checks every minute
+        time.sleep(60)
+    except locationsharinglib.InvalidCookies:
+        message = "Invalid Cookies"
         ping_mail(google_email, mail_password, message)
-        print(message)
-    # checks every minute
-    time.sleep(60)
+        sys.exit(0)
