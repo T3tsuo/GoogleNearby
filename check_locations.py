@@ -113,15 +113,16 @@ def nearby():
             # for every UserNearby object
             for i in range(len(black_listed_nearby)):
                 # if distance is less or equal to 300 meters, only can update 1 hour after an update has been made
-                if d <= nearby_distance_km and black_listed_nearby[i].can_refresh(person.full_name, time.time(), True):
+                is_near = d <= nearby_distance_km
+                if is_near and black_listed_nearby[i].can_refresh(person.full_name, time.time(), is_near):
                     message += str(person.full_name) + " is " + str(round(d * 1000, 2)) + " meters away\n"
                     # update the UserNearby Objects data to only refresh an hour later and update its current state
                     black_listed_nearby[i].timestamp = time.time() + NEARBY_WAIT_REFRESH
-                    black_listed_nearby[i].near = True
-                elif d > nearby_distance_km and black_listed_nearby[i].can_refresh(person.full_name, time.time(), False):
+                    black_listed_nearby[i].near = is_near
+                elif not is_near and black_listed_nearby[i].can_refresh(person.full_name, time.time(), is_near):
                     message += str(person.full_name) + " is no longer nearby\n"
                     black_listed_nearby[i].timestamp = time.time() + NEARBY_WAIT_REFRESH
-                    black_listed_nearby[i].near = False
+                    black_listed_nearby[i].near = is_near
     return message
 
 
