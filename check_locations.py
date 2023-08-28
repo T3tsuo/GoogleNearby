@@ -168,9 +168,7 @@ while True:
             message += at_location_check()
         if message != "":
             ping_mail(google_email, mail_password, message)
-            print(message)
-        elif message == "":
-            print("No Update :(\n")
+            print(message))
         # checks every minute
         time.sleep(60)
     except locationsharinglib.InvalidCookies:
