@@ -18,9 +18,36 @@ if os.path.isfile("mail_password.dat"):
 
 black_listed_nearby = []
 
+
+def ping_mail(user, password, mes):
+    sent_from = user
+    to = [user, user]
+    subject = "GoogleNearby"
+
+    email_text = """From: %s\nTo: %s\nSubject: %s\n\n%s
+        """ % (sent_from, ", ".join(to), subject, mes)
+
+    try:
+        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        server.ehlo()
+        server.login(user, password)
+        server.sendmail(sent_from, to, email_text)
+        server.close()
+
+        print('Email sent!')
+    except:
+        print('Something went wrong...')
+
+
 # login cookies
 cookies_file = 'cookies.txt'
-service = Service(cookies_file=cookies_file, authenticating_account=google_email)
+try:
+    service = Service(cookies_file=cookies_file, authenticating_account=google_email)
+except locationsharinglib.InvalidCookies:
+    message = "Invalid Cookies"
+    ping_mail(google_email, mail_password, message)
+    print(message)
+    sys.exit(0)
 
 # loading saved_locations format: FullName,LocationName,Latitude,Longitude
 if os.path.isfile("saved_locations.txt"):
@@ -41,26 +68,6 @@ def distance_km(lat1, lon1, lat2, lon2):
     a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
     # radius of earth * 2 is that magic num
     return 12742 * asin(sqrt(a))
-
-
-def ping_mail(user, password, mes):
-    sent_from = user
-    to = [user, user]
-    subject = "GoogleNearby"
-
-    email_text = """From: %s\nTo: %s\nSubject: %s\n\n%s
-        """ % (sent_from, ", ".join(to), subject, mes)
-
-    try:
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-        server.ehlo()
-        server.login(user, password)
-        server.sendmail(sent_from, to, email_text)
-        server.close()
-
-        print('Email sent!')
-    except:
-        print('Something went wrong...')
 
 
 def nearby():
@@ -125,4 +132,5 @@ while True:
     except locationsharinglib.InvalidCookies:
         message = "Invalid Cookies"
         ping_mail(google_email, mail_password, message)
+        print(message)
         sys.exit(0)
