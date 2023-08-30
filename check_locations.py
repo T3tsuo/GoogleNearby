@@ -176,3 +176,8 @@ while True:
         ping_mail(google_email, mail_password, message)
         print(message)
         sys.exit(0)
+    except:
+        message = "Error"
+        ping_mail(google_email, mail_password, message)
+        print(message)
+        sys.exit(0)
